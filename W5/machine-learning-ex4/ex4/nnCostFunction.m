@@ -1,4 +1,4 @@
-function [J grad] = nnCostFunction(nn_params, ...
+ function [J grad] = nnCostFunction(nn_params, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
                                    num_labels, ...
@@ -63,13 +63,7 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
-
-
-
-
-
-
-
+% This one was really tough to do.
 
 
 
