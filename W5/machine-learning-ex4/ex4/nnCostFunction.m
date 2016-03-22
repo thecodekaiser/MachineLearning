@@ -90,10 +90,25 @@ end;
 
 J = (-1 * J) / m;
 
-% regularization part begins now
+% Regularization part begins now
+% input_layer_size = 400, hidden_layer_size = 25, output_layer_size = 10 (Assuming)
+
+reg_part = 0;
+
+for j = 1:hidden_layer_size,
+	for k = 1:input_layer_size,
+		reg_part = reg_part + (Theta1(j, k+1) * Theta1(j, k+1));
+	end;
+end;
+
+for j = 1:K,
+	for k = 1:hidden_layer_size,
+		reg_part = reg_part + (Theta2(j, k+1) * Theta2(j, k+1));
+	end;
+end;
 
 
-
+J = J + (lambda * reg_part) / (2 * m);
 
 
 
