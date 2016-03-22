@@ -1,4 +1,4 @@
- function [J grad] = nnCostFunction(nn_params, ...
+  function [J grad] = nnCostFunction(nn_params, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
                                    num_labels, ...
@@ -64,10 +64,33 @@ Theta2_grad = zeros(size(Theta2));
 
 
 % This one was really tough to do.
+K = num_labels;			% This is the different types of labels that we can have
+temp_y = zeros(m, K);	% Mapping vector y to this one
 
+for i = 1:m,
+	idx = y(i, 1);
+	temp_y(i, idx) = 1;
+end;
 
+X = [ones(m, 1) X];		% X = 5000 * 401
 
+y = temp_y;				% Now we have mapped y to binary vector of 1's and 0's
+hidden = sigmoid(Theta1 * X');		% hidden = 25 * 5000
+hidden = hidden';
+hidden = [ones(m, 1) hidden];		% hidden = 5000 * 26
+output = sigmoid(Theta2 * hidden'); % output = 10 * 5000
+hx     = output';					% Now hx = 5000 * 10
 
+for i = 1:m,
+	for k = 1:K,
+		val = y(i, k) * log(hx(i, k)) + (1 - y(i, k)) * log(1 - hx(i, k));
+		J = J + val;
+	end;
+end;
+
+J = (-1 * J) / m;
+
+% regularization part begins now
 
 
 
