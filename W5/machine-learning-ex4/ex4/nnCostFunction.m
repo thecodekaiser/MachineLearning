@@ -128,9 +128,20 @@ delta_2 = (Theta2' * delta_3') .* hidden_grad' ;	% delta_2 = 26 * 5000
 delta_2 = delta_2(2:end, :);						% delta_2 = 25 * 5000
 
 Theta2_grad = (Theta2_grad + (delta_3' * hidden)) / m;		% 'Theta2_grad = 10 * 26
-Theta1_grad = (Theta1_grad + (delta_2  * X)) / m;			% Theta1_grad = 25 * 401
+Theta1_grad = (Theta1_grad + (delta_2  * X)) / m;			% 'Theta1_grad = 25 * 401
 
+% Now we add the regularization terms to the backpropagation
+reg2_grad = zeros(K, hidden_layer_size);	% reg2_grad = 10 * 25
+reg2_grad = reg2_grad + ((Theta2(:, 2:end) .* lambda) / m);
+reg2_grad = [zeros(K, 1) reg2_grad];		% reg2_grad = 10 * 26
 
+Theta2_grad = Theta2_grad + reg2_grad;		
+
+reg1_grad = zeros(hidden_layer_size, input_layer_size);		% reg1_grad = 25 * 400
+reg1_grad = reg1_grad + ((Theta1(:, 2:end) .* lambda) / m);
+reg1_grad = [zeros(hidden_layer_size, 1) reg1_grad];		% reg1_grad = 25 * 401
+
+Theta1_grad = Theta1_grad + reg1_grad;
 
 
 % -------------------------------------------------------------
