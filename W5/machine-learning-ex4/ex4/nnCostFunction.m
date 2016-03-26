@@ -77,9 +77,14 @@ X = [ones(m, 1) X];		% X = 5000 * 401
 y = temp_y;				% Now we have mapped y to binary vector of 1's and 0's
 hidden = sigmoid(Theta1 * X');		% hidden = 25 * 5000
 hidden = hidden';
+hidden_grad = sigmoidGradient(Theta1 * X'); % hidden_grad = 25 * 5000
+hidden_grad = hidden_grad';
+hidden_grad = [ones(m, 1) hidden_grad];
+
+
 hidden = [ones(m, 1) hidden];		% hidden = 5000 * 26
 output = sigmoid(Theta2 * hidden'); % output = 10 * 5000
-hx     = output';					% Now hx = 5000 * 10
+hx     = output';					% Now' hx = 5000 * 10
 
 for i = 1:m,
 	for k = 1:K,
@@ -114,9 +119,19 @@ J = J + (lambda * reg_part) / (2 * m);
 
 % backpropagation part begins now
 
-for t = 1:m,
-	
-end;
+% Here first we have to do Feedforward propogation which we have already done
+% Hidden and output have already got everything calculated so we don't 
+% need to do any Feedforward propogation.
+
+delta_3 = hx - y;		% delta_3 = 5000 * 10
+delta_2 = (Theta2' * delta_3') .* hidden_grad' ;	% delta_2 = 26 * 5000
+delta_2 = delta_2(2:end, :);						% delta_2 = 25 * 5000
+
+Theta2_grad = (Theta2_grad + (delta_3' * hidden)) / m;		% 'Theta2_grad = 10 * 26
+Theta1_grad = (Theta1_grad + (delta_2  * X)) / m;			% Theta1_grad = 25 * 401
+
+
+
 
 % -------------------------------------------------------------
 
